@@ -7,7 +7,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={` antialiased`}
+        className={` antialiased h-[100vh] bg-[#f5f5f5] flex items-center justify-center`}
       >
         {children}
       </body>
