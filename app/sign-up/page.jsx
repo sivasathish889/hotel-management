@@ -1,32 +1,53 @@
+"use client"
 import { Email, Lock, Phone, UserPlus } from '@deemlol/next-icons'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 import React from 'react'
+import { toast } from 'react-toastify'
 
 const Register = () => {
+  const route = useRouter()
   const handleSubmit = async (e) => {
     e.preventDefault()
     await axios.post("/api/auth/register", {
-      data: {
-        username: e.target[0].value,
-        email: e.target[1].value,
-        phone: e.target[2].value,
-        password: e.target[3].value,
-        passwordConfirm: e.target[4].value,
-      },
+      username: e.target[0].value,
+      email: e.target[1].value,
+      phone: e.target[2].value,
+      password: e.target[3].value,
+      passwordConfirm: e.target[4].value,
     })
       .then((res) => {
-        console.log(res.data)
+        if (res.data.success) {
+          route.push('/login')
+          toast.success(res.data.message, {
+            position: "top-right",
+            autoClose: 5000,
+            pauseOnHover: true,
+            theme: "light",
+          });
+        }
+        else {
+          toast.warning(res.data.message, {
+            position: "top-right",
+            autoClose: 5000,
+            pauseOnHover: true,
+            theme: "light",
+          });
+        }
       })
       .catch((err) => {
-        console.log(err)
+        toast.warning(err.response.data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          pauseOnHover: true,
+          theme: "light",
+        });
       })
   }
 
   return (
     <div>
       <section className="relative py-20 2xl:py-40 bg-gray-800 overflow-hidden">
-        <img className="hidden lg:block absolute inset-0 mt-32" src="zospace-assets/lines/line-mountain.svg" alt="" />
-        <img className="hidden lg:block absolute inset-y-0 right-0 -mr-40 -mt-32" src="zospace-assets/lines/line-right-long.svg" alt="" />
         <div className="relative container px-4 mx-auto">
           <div className="max-w-5xl mx-auto">
             <div className="flex flex-wrap items-center -mx-4">
@@ -39,7 +60,7 @@ const Register = () => {
               </div>
               <div className="w-full lg:w-1/2 px-4">
                 <div className="px-6 lg:px-20 py-12 lg:py-24 bg-gray-600 rounded-lg">
-                  <form onSubmit={() => handleSubmit()}>
+                  <form onSubmit={(e) => handleSubmit(e)}>
                     <h3 className="mb-10 text-2xl text-white font-bold font-heading">Register Account</h3>
                     <div className="flex items-center pl-6 mb-3 bg-white rounded-full">
                       <span className="inline-block pr-3 py-2 border-r border-gray-50">
